@@ -57,6 +57,15 @@ async function run() {
             res.send(result);
 
         });
+
+        app.get('/category/:category', async (req, res) => {
+            const category = req.params.category
+            const filter = { category: { $regex: new RegExp(category, 'i') } };
+            const result = await equipmentCollection.find(filter).toArray()
+            res.send(result)
+        })
+
+
         app.delete('/equipments/:id', async (req, res) => {
             const id = req.params.id
             const filter = { _id: new ObjectId(id) }
@@ -77,14 +86,14 @@ async function run() {
                     customization: updatedProduct.customization,
                     processingTime: updatedProduct.processingTime,
                     stockStatus: updatedProduct.stockStatus,
-                    
+
                 }
             }
-            const id = req.params.id 
-            const filter= {_id: new ObjectId(id)}
+            const id = req.params.id
+            const filter = { _id: new ObjectId(id) }
             const options = { upsert: true }
             const result = await equipmentCollection.updateOne(filter, product, options)
-            res.send(result) 
+            res.send(result)
         })
 
 
